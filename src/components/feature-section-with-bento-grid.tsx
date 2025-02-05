@@ -9,21 +9,21 @@ import Link from "next/link";
 
 export function FeaturesSectionWithBentoGrid() {
   const features = [
-    {
-      title: "Track issues effectively",
-      description:
-        "Track and manage your project issues with ease using our intuitive interface.",
-      skeleton: <SkeletonOne />,
-      className:
-        "col-span-1 md:col-span-4 lg:col-span-4 border-b md:border-r dark:border-neutral-800",
-    },
-    {
-      title: "Capture pictures with AI",
-      description:
-        "Capture stunning photos effortlessly using our advanced AI technology.",
-      skeleton: <SkeletonTwo />,
-      className: "col-span-1 md:col-span-2 lg:col-span-2 border-b dark:border-neutral-800",
-    },
+    // {
+    //   title: "Track issues effectively",
+    //   description:
+    //     "Track and manage your project issues with ease using our intuitive interface.",
+    //   skeleton: <SkeletonOne />,
+    //   className:
+    //     "col-span-1 md:col-span-4 lg:col-span-4 border-b md:border-r dark:border-neutral-800",
+    // },
+    // {
+    //   title: "Capture pictures with AI",
+    //   description:
+    //     "Capture stunning photos effortlessly using our advanced AI technology.",
+    //   skeleton: <SkeletonTwo />,
+    //   className: "col-span-1 md:col-span-2 lg:col-span-2 border-b dark:border-neutral-800",
+    // },
     {
       title: "Watch our AI on YouTube",
       description:

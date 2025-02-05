@@ -1,195 +1,221 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import Link from "next/link"
-import { LayoutGroup, motion } from "framer-motion"
+import { motion, LayoutGroup } from "framer-motion"
 import { TextRotate } from "@/components/ui/text-rotate"
 import Floating, { FloatingElement } from "@/components/ui/parallax-floating"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react"
+import Link from "next/link"
 
 const exampleImages = [
   {
-    url: "https://images.unsplash.com/photo-1727341554370-80e0fe9ad082?q=80&w=2276&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    author: "Branislav Rodman",
-    title: "A Black and White Photo of a Woman Brushing Her Teeth",
+    url: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=500&auto=format&fit=crop",
+    alt: "Student studying with laptop in library",
   },
   {
-    url: "https://images.unsplash.com/photo-1640680608781-2e4199dd1579?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    link: "https://unsplash.com/photos/a-painting-of-a-palm-leaf-on-a-multicolored-background-AaNPwrSNOFE",
-    title: "Neon Palm",
-    author: "Tim Mossholder",
+    url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=500&auto=format&fit=crop",
+    alt: "Group study session with laptops",
   },
   {
-    url: "https://images.unsplash.com/photo-1726083085160-feeb4e1e5b00?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    link: "https://unsplash.com/photos/a-blurry-photo-of-a-crowd-of-people-UgbxzloNGsc",
-    author: "ANDRII SOLOK",
-    title: "A blurry photo of a crowd of people",
+    url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=500&auto=format&fit=crop",
+    alt: "Person testing software on laptop",
   },
   {
-    url: "https://images.unsplash.com/photo-1562016600-ece13e8ba570?q=80&w=2838&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    link: "https://unsplash.com/photos/rippling-crystal-blue-water-9-OCsKoyQlk",
-    author: "Wesley Tingey",
-    title: "Rippling Crystal Blue Water",
+    url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=500&auto=format&fit=crop",
+    alt: "Student working on assignments",
   },
   {
-    url: "https://images.unsplash.com/photo-1624344965199-ed40391d20f2?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    link: "https://unsplash.com/de/fotos/mann-im-schwarzen-hemd-unter-blauem-himmel-m8RDNiuEXro",
-    author: "Serhii Tyaglovsky",
-    title: "Mann im schwarzen Hemd unter blauem Himmel",
+    url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=500&auto=format&fit=crop",
+    alt: "College students collaborating",
   },
+  {
+    url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=500&auto=format&fit=crop",
+    alt: "Person writing notes while studying",
+  }
 ]
 
 function LandingHero() {
+  const [showDialog, setShowDialog] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+
+
   return (
-    <section className="w-full min-h-screen flex items-center justify-center relative">
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <Floating sensitivity={-0.5} className="relative">
-          <FloatingElement
-            depth={0.5}
-            className="absolute top-[8%] right-[12%] md:top-[10%] md:right-[15%]"
-          >
-            <motion.img
-              src={exampleImages[0].url}
-              alt={exampleImages[0].title}
-              className="w-28 h-24 sm:w-36 sm:h-32 md:w-44 md:h-36 lg:w-48 lg:h-40 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform -rotate-[6deg] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            />
-          </FloatingElement>
+    <section className="w-full h-screen overflow-hidden md:overflow-visible flex flex-col items-center justify-center relative bg-none z-0">
+      {/* <div className="absolute inset-0 grid grid-cols-[repeat(40,minmax(0,1fr))] grid-rows-[repeat(20,minmax(0,1fr))] bg-dots-pattern bg-dots [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]">
+        {Array.from({ length: 800 }).map((_, i) => (
+          <div
+            key={i}
+            className="w-2 h-2 rounded-full bg-black/10"
+            style={{
+              gridColumn: `${(i % 40) + 1} / span 1`,
+              gridRow: `${Math.floor(i / 40) + 1} / span 1`
+            }}
+          />
+        ))}
+      </div> */}
+      <Floating sensitivity={-0.5} className="h-full">
+        <FloatingElement
+          depth={0.5}
+          className="top-[15%] left-[2%] md:top-[25%] md:left-[5%]"
+        >
+          <motion.img
+            src={exampleImages[0].url}
+            alt={exampleImages[0].alt}
+            className="w-16 h-12 sm:w-24 sm:h-16 md:w-28 md:h-20 lg:w-32 lg:h-24 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform -rotate-[3deg] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          />
+        </FloatingElement>
 
-          <FloatingElement
-            depth={1}
-            className="absolute bottom-[12%] right-[15%] md:bottom-[15%] md:right-[18%]"
-          >
-            <motion.img
-              src={exampleImages[1].url}
-              alt={exampleImages[1].title}
-              className="w-32 h-24 sm:w-40 sm:h-32 md:w-48 md:h-40 lg:w-56 lg:h-48 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform rotate-[8deg] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            />
-          </FloatingElement>
+        <FloatingElement
+          depth={1}
+          className="top-[0%] left-[8%] md:top-[6%] md:left-[11%]"
+        >
+          <motion.img
+            src={exampleImages[1].url}
+            alt={exampleImages[1].alt}
+            className="w-40 h-28 sm:w-48 sm:h-36 md:w-56 md:h-44 lg:w-60 lg:h-48 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform -rotate-12 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          />
+        </FloatingElement>
 
-          <FloatingElement
-            depth={4}
-            className="absolute top-[45%] left-[12%] md:top-[40%] md:left-[15%]"
-          >
-            <motion.img
-              src={exampleImages[2].url}
-              alt={exampleImages[2].title}
-              className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60 object-cover -rotate-[12deg] hover:scale-105 duration-200 cursor-pointer transition-transform shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-            />
-          </FloatingElement>
+        <FloatingElement
+          depth={4}
+          className="top-[90%] left-[6%] md:top-[80%] md:left-[8%]"
+        >
+          <motion.img
+            src={exampleImages[2].url}
+            alt={exampleImages[2].alt}
+            className="w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 lg:w-64 lg:h-64 object-cover -rotate-[4deg] hover:scale-105 duration-200 cursor-pointer transition-transform border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          />
+        </FloatingElement>
 
-          <FloatingElement
-            depth={2}
-            className="absolute bottom-[10%] left-[15%] md:bottom-[12%] md:left-[18%]"
-          >
-            <motion.img
-              src={exampleImages[3].url}
-              alt={exampleImages[3].title}
-              className="w-40 h-32 sm:w-48 sm:h-40 md:w-56 md:h-48 lg:w-64 lg:h-56 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] border-2 border-black rotate-[5deg] rounded-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.1 }}
-            />
-          </FloatingElement>
+        <FloatingElement
+          depth={2}
+          className="top-[0%] left-[87%] md:top-[2%] md:left-[83%]"
+        >
+          <motion.img
+            src={exampleImages[3].url}
+            alt={exampleImages[3].alt}
+            className="w-40 h-36 sm:w-48 sm:h-44 md:w-60 md:h-52 lg:w-64 lg:h-56 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none rotate-[6deg]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+          />
+        </FloatingElement>
 
-          <FloatingElement
-            depth={1}
-            className="absolute top-[25%] right-[35%] md:top-[30%] md:right-[40%]"
-          >
-            <motion.img
-              src={exampleImages[4].url}
-              alt={exampleImages[4].title}
-              className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rotate-[15deg] rounded-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.3 }}
-            />
-          </FloatingElement>
-        </Floating>
+        <FloatingElement
+          depth={1}
+          className="top-[78%] left-[83%] md:top-[68%] md:left-[83%]"
+        >
+          <motion.img
+            src={exampleImages[4].url}
+            alt={exampleImages[4].alt}
+            className="w-44 h-44 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 object-cover hover:scale-105 duration-200 cursor-pointer transition-transform border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none rotate-[19deg]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.3 }}
+          />
+        </FloatingElement>
+      </Floating>
 
-        <div className="flex flex-col items-center justify-center max-w-3xl mx-auto text-center relative z-20">
-          <motion.h1
-            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-center w-full flex-col flex whitespace-pre leading-tight font-mono font-black tracking-tight space-y-1 md:space-y-4 text-black mix-blend-multiply"
-            animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2, ease: "easeOut", delay: 0.3 }}
-          >
-            <span className="bg-[#FF4081] -rotate-2 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black inline-block">Make Learning</span>
-            <LayoutGroup>
-              <motion.span layout className="flex whitespace-pre justify-center">
-                <motion.span
-                  layout
-                  className="flex whitespace-pre bg-[#faf9f6] rotate-1 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black"
-                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                >
-                  {""}
-                </motion.span>
-                <TextRotate
-                  texts={[
-                    "fancy",
-                    "fun",
-                    "lovely ♥",
-                    "inspiring ✨",
-                    "🪩 funky",
-                    "💃🕺",
-                    "sexy",
-                    "🕶️ cool",
-                    "go 🚀",
-                    "🔥🔥🔥",
-                    "dynamic ⚡",
-                    "pop ✨",
-                    "rock 🤘",
-                  ]}
-                  mainClassName="overflow-hidden pr-3 bg-[#00E5FF] rotate-1 px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black"
-                  staggerDuration={0.03}
-                  staggerFrom="last"
-                  rotationInterval={3000}
-                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                />
+      <div className="flex flex-col justify-center items-center w-[250px] sm:w-[300px] md:w-[500px] lg:w-[700px] z-50 pointer-events-auto">
+        <motion.h1
+          className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-center w-full justify-center items-center flex-col flex whitespace-pre leading-tight tracking-tight space-y-1 md:space-y-4 font-inter"
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.2, ease: "easeOut", delay: 0.3 }}
+        >
+          <span className="bg-yellow-300 px-4 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-bold">Make Learning</span>
+          <LayoutGroup>
+            <motion.span layout className="flex items-center whitespace-pre flex-nowrap font-bold">
+              <TextRotate
+                texts={[
+                  "fun🎉",
+                  "lovely❤️",
+                  "inspiring",
+                  "funky👽",
+                  "💃🕺",
+                  "sexy",
+                  "🕶️cool",
+                  "go🚀",
+                  "🔥🔥🔥",
+                  "dynamic",
+                  "pop✨",
+                  "rock🤘",
+                ]}
+                mainClassName="overflow-hidden px-4 sm:px-5 text-white bg-blue-500 py-0 pb-2 md:pb-4 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap inline-flex items-center justify-center font-bold"
+                staggerDuration={0.03}
+                staggerFrom="last"
+                rotationInterval={3000}
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              />
+              <motion.span
+                className="flex whitespace-pre font-bold"
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              >
+                {" "} again
               </motion.span>
-            </LayoutGroup>
-          </motion.h1>
+            </motion.span>
+          </LayoutGroup>
+        </motion.h1>
+        <motion.p
+          className="relative text-base sm:text-lg md:text-xl lg:text-2xl text-center max-w-5xl mx-auto px-4 py-6 bg-green-300 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] z-20 mt-6"
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{
+            duration: 0.2,
+            ease: "easeOut",
+            delay: 0.6,
+          }}
+        >
+          <span className="font-black">We&apos;re working on making learning fun and engaging.</span> Join our waitlist to be the first to know when we launch!
+        </motion.p>
 
-          <motion.p
-            className="text-sm sm:text-lg md:text-xl lg:text-2xl text-center font-mono font-bold pt-4 sm:pt-8 md:pt-10 lg:pt-12 bg-[#B2FF59] -rotate-1 px-4 py-2 mt-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black max-w-2xl"
-            animate={{ opacity: 1, y: 0 }}
-            initial={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2, ease: "easeOut", delay: 0.5 }}
-          >
-            Upload PDFs, highlight key points, and streamline your learning. Fast, intuitive, and built for effortless studying.
-          </motion.p>
-
-          <div className="flex flex-row justify-center space-x-4 items-center mt-10 sm:mt-16 md:mt-20 lg:mt-20">
-            <motion.button
-              className="sm:text-base md:text-lg lg:text-xl font-mono font-black tracking-tight bg-[#FF1744] text-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
-              animate={{ opacity: 1, y: 0 }}
-              initial={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.2, ease: "easeOut", delay: 0.7 }}
+        <div className="mx-auto max-w-2xl text-center">
+          {/* <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            Get Started Today
+          </h1>
+          <p className="mt-6 text-lg leading-8 text-gray-600">
+            Join our community and start learning with us.
+          </p> */}
+          <div className="mt-10 flex items-center justify-center gap-x-8">
+            <Link
+              href="/sign-up"
+              className="rounded-xl px-8 py-5 text-lg font-bold text-white bg-[#FF3366] border-4 border-[#000000] shadow-[4px_4px_0px_0px_#000000] 
+  hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all"
             >
-              <Link href="/docs/introduction">
-                Get started <span className="font-serif ml-1">→</span>
-              </Link>
-            </motion.button>
-            <motion.button
-              className="sm:text-base md:text-lg lg:text-xl font-mono font-black tracking-tight bg-black text-white px-6 py-3 shadow-[4px_4px_0px_0px_rgba(255,23,68,1)] border-2 border-[#FF1744] hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[6px_6px_0px_0px_rgba(255,23,68,1)] transition-all"
-              animate={{ opacity: 1, y: 0 }}
-              initial={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.2, ease: "easeOut", delay: 0.7 }}
+              Get Started
+            </Link>
+            <Link
+              href="/demo"
+              className="rounded-xl px-8 py-5 text-lg font-bold text-black bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all"
             >
-              <Link href="https://github.com/danielpetho/fancy">Watch Demo</Link>
-            </motion.button>
+              Watch Our Demo
+            </Link>
           </div>
         </div>
+
+        <Dialog open={showDialog} onOpenChange={setShowDialog}>
+          <DialogContent className="sm:max-w-md border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-inter">🎉 You&apos;re on the list!</DialogTitle>
+              <DialogDescription className="text-lg font-inter">
+                Thanks for joining! We&apos;ll notify you when we launch. Keep an eye on your inbox for updates about our what we&apos;re cooking.
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
-  );
+  )
 }
 
 export { LandingHero }
