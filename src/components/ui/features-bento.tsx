@@ -12,9 +12,29 @@ import {
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+// Add these styles to your global CSS or create a new style block
+const styles = `
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+`;
+
 export function FeaturesBento() {
   return (
     <div className="relative z-20 py-24 max-w-[90rem] mx-auto px-6">
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
       <div className="max-w-3xl mx-auto text-center mb-20">
         <h2 className="text-5xl lg:text-7xl font-bold text-black mb-8 tracking-tight">
           Study Smarter with AI
@@ -130,28 +150,35 @@ const SkeletonTwo = () => {
 };
 
 const SkeletonThree = () => {
-  const variants = {
-    initial: {
-      backgroundPosition: "0 50%",
-    },
-    animate: {
-      backgroundPosition: ["0, 50%", "100% 50%", "0 50%"],
-    },
-  };
+  const [isFlipped, setIsFlipped] = React.useState(false);
+
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      variants={variants}
-      transition={{
-        duration: 5,
-        repeat: Infinity,
-        repeatType: "reverse",
-      }}
-      className="flex flex-1 w-full h-full min-h-[6rem] rounded-lg border-2 border-black bg-gradient-to-r from-violet-500 via-pink-500 to-orange-500 bg-[length:200%_200%] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
-    >
-      <motion.div className="h-full w-full rounded-lg"></motion.div>
-    </motion.div>
+    <div className="relative w-full h-full min-h-[6rem] perspective-1000">
+      <motion.div
+        className="w-full h-full relative preserve-3d duration-500 cursor-pointer"
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.1 }}
+        onHoverStart={() => setIsFlipped(true)}
+        onHoverEnd={() => setIsFlipped(false)}
+      >
+        {/* Front of card */}
+        <motion.div
+          className="absolute w-full h-full backface-hidden rounded-lg border-2 border-black bg-gradient-to-r from-violet-500 via-pink-500 to-orange-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] flex items-center justify-center"
+        >
+          <div className="text-white text-xl font-bold">Flash Cards</div>
+        </motion.div>
+
+        {/* Back of card */}
+        <motion.div
+          className="absolute w-full h-full backface-hidden rounded-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] rotate-y-180 flex flex-col items-center justify-center p-6"
+        >
+          <h3 className="text-lg font-bold mb-2">Interactive Learning</h3>
+          <p className="text-sm text-center text-neutral-600">
+            Create and study with AI-powered flashcards. Perfect for memorization and quick reviews.
+          </p>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
 
